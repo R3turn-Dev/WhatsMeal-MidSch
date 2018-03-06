@@ -3,18 +3,22 @@ from threading import get_ident
 
 
 class DBManager:
-    def __init__(self, config):
+    def __init__(self, config, initial_connect=True):
         self.conn = None
         self.cursor = None
 
         self.connDict = {}
         self.curDict = {}
 
-        self.host = config.host
-        self.port = config.post
-        self.db = config.db
-        self.user = config.user
-        self.pw = config.pw
+        self.host = config.get('host')
+        self.port = config.get('post')
+        self.db = config.get('db')
+        self.user = config.get('user')
+        self.pw = config.get('pw')
+
+        if initial_connect:
+            self.getConn()
+            self.getCursor()
 
     def getConn(self):
         self.conn = connect(
